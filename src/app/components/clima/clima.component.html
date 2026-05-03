@@ -1,0 +1,67 @@
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2 class="mb-4">&#9728; Consulta el Clima</h2>
+
+    <div class="input-group mb-3">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Escribe una ciudad..."
+        [(ngModel)]="ciudad"
+        (keyup.enter)="buscarClima()"
+      />
+      <button class="btn btn-primary" (click)="buscarClima()">Buscar</button>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+    <div *ngIf="clima">
+      <div class="card text-center shadow mb-4">
+        <div class="card-body">
+          <h3 class="card-title">{{ clima.name }}, {{ clima.sys.country }}</h3>
+          <p class="display-4">{{ clima.main.temp }}&#176;C</p>
+          <p class="text-capitalize text-muted">{{ clima.weather[0].description }}</p>
+          <div class="row mt-3">
+            <div class="col">
+              <strong>M&#237;nima</strong>
+              <p>{{ clima.main.temp_min }}&#176;C</p>
+            </div>
+            <div class="col">
+              <strong>M&#225;xima</strong>
+              <p>{{ clima.main.temp_max }}&#176;C</p>
+            </div>
+            <div class="col">
+              <strong>Humedad</strong>
+              <p>{{ clima.main.humidity }}%</p>
+            </div>
+            <div class="col">
+              <strong>Sensaci&#243;n</strong>
+              <p>{{ clima.main.feels_like }}&#176;C</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráfico -->
+      <div class="card shadow p-3 mb-4">
+        <h5 class="mb-3">Gr&#225;fico de temperaturas</h5>
+        <canvas id="climaChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Historial FUERA del *ngIf -->
+    <div *ngIf="historial.length > 0" class="card shadow p-3 mt-2">
+      <h5>Ciudades buscadas</h5>
+      <ul class="list-group">
+        <li *ngFor="let c of historial"
+            class="list-group-item d-flex justify-content-between align-items-center"
+            style="cursor:pointer"
+            (click)="ciudad = c.name; buscarClima()">
+          <span><strong>{{ c.name }}, {{ c.sys.country }}</strong></span>
+          <span class="badge bg-primary">{{ c.main.temp }}&#176;C</span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</div>
